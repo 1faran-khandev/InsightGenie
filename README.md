@@ -30,7 +30,9 @@ Currently, the project focuses on the foundational frontend structure, which inc
    ```bash
    git clone https://github.com/1faran-khandev/InsightGenie.git
 2. Navigate to the project directory:
+   
    cd InsightGenie
 
-3. Install dependencies:
+4. Install dependencies:
+   
    npm install
