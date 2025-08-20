@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import Papa from "papaparse";
+import { useState } from "react";
 
-const FileUpload = () => {
-  const [file, setFile] = useState(null);
+const FileUpload = ({ setData }) => {
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    Papa.parse(file, {
+      header: true,
+      dynamicTyping: true,
+      complete: (result) => {
+        console.log(result.data);
+        setData(result.data); // send parsed data to dashboard
+      },
+    });
   };
 
   return (
-    <div className="mb-6">
-      <label className="block mb-2 font-semibold">Upload Dataset:</label>
-      <input
-        type="file"
-        accept=".csv, .xlsx"
-        onChange={handleFileChange}
-        className="border border-gray-300 p-3 rounded w-full"
-      />
-      {file && <p className="mt-2 text-green-600">{file.name} selected</p>}
+    <div>
+      <input type="file" accept=".csv" onChange={handleFileUpload} />
     </div>
   );
 };

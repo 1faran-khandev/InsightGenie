@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Bar, Line, Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -11,9 +11,9 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from "chart.js";
 
-// Register ChartJS components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,19 +23,55 @@ ChartJS.register(
   ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
-const ChartsSection = () => {
-  
-  const labels = ["Jan", "Feb", "Mar", "Apr", "May"];
+const ChartCard = ({ title, children }) => (
+  <div className="bg-white p-4 rounded-lg shadow-md h-[350px] flex flex-col">
+    <h4 className="text-lg font-semibold mb-2">{title}</h4>
+    <div className="flex-1">{children}</div>
+  </div>
+);
+
+const ChartsSection = ({ data }) => {
+  const labels = data.map((item) => item.month);
+  const sales = data.map((item) => item.sales);
+
+  // Refs for canvas elements
+  const barRef = useRef(null);
+  const lineRef = useRef(null);
+
+  // Gradient states
+  const [barGradient, setBarGradient] = useState("rgba(59, 130, 246, 0.7)");
+  const [lineGradient, setLineGradient] = useState("rgba(34, 197, 94, 0.3)");
+
+  // Create gradients on mount
+  useEffect(() => {
+    if (barRef.current) {
+      const ctx = barRef.current.ctx;
+      const grad = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
+      grad.addColorStop(0, "rgba(59, 130, 246, 0.9)");
+      grad.addColorStop(1, "rgba(59, 130, 246, 0.3)");
+      setBarGradient(grad);
+    }
+
+    if (lineRef.current) {
+      const ctx = lineRef.current.ctx;
+      const grad = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
+      grad.addColorStop(0, "rgba(34, 197, 94, 0.7)");
+      grad.addColorStop(1, "rgba(34, 197, 94, 0.2)");
+      setLineGradient(grad);
+    }
+  }, []);
+
   const barData = {
     labels,
     datasets: [
       {
-        label: "Revenue",
-        data: [1200, 1900, 1700, 2200, 2000],
-        backgroundColor: "rgba(59, 130, 246, 0.7)", // Tailwind blue-500
+        label: "Sales",
+        data: sales,
+        backgroundColor: barGradient,
       },
     ],
   };
@@ -44,21 +80,22 @@ const ChartsSection = () => {
     labels,
     datasets: [
       {
-        label: "Users",
-        data: [300, 450, 400, 600, 550],
-        borderColor: "rgba(34, 197, 94, 0.9)", 
-        backgroundColor: "rgba(34, 197, 94, 0.3)",
+        label: "Sales Trend",
+        data: sales,
+        borderColor: "rgba(34, 197, 94, 0.9)",
+        backgroundColor: lineGradient,
         tension: 0.4,
+        fill: true,
       },
     ],
   };
 
   const pieData = {
-    labels: ["North", "South", "East", "West"],
+    labels,
     datasets: [
       {
-        label: "Region Sales",
-        data: [300, 200, 150, 100],
+        label: "Sales Share",
+        data: sales,
         backgroundColor: [
           "rgba(59, 130, 246, 0.7)",
           "rgba(234, 179, 8, 0.7)",
@@ -69,19 +106,21 @@ const ChartsSection = () => {
     ],
   };
 
+  const options = { responsive: true, maintainAspectRatio: false };
+
   return (
     <div className="mb-6">
       <h3 className="text-2xl font-bold mb-4">Data Visualizations</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <Bar data={barData} />
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <Line data={lineData} />
-        </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <Pie data={pieData} />
-        </div>
+        <ChartCard title="Revenue Growth">
+          <Bar ref={barRef} data={barData} options={options} />
+        </ChartCard>
+        <ChartCard title="Sales Trend">
+          <Line ref={lineRef} data={lineData} options={options} />
+        </ChartCard>
+        <ChartCard title="Sales Distribution">
+          <Pie data={pieData} options={options} />
+        </ChartCard>
       </div>
     </div>
   );
