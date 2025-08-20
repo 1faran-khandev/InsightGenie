@@ -1,9 +1,9 @@
 export const mockAIResponse = (query, data) => {
-  if (!data || data.length === 0) return "⚠️ Please upload a dataset first.";
+  if (!data || data.length === 0) return " Please upload a dataset first.";
 
   const lowerQuery = query.toLowerCase();
 
-  // ✅ Normalize dataset keys once for safe access
+  // Normalize dataset keys once for safe access
   const normalizedData = data.map(item => {
     const obj = {};
     Object.keys(item).forEach(k => {
@@ -26,8 +26,8 @@ export const mockAIResponse = (query, data) => {
   if (lowerQuery.includes("sales") || lowerQuery.includes("revenue") || lowerQuery.includes("total sales")) {
     const totalRevenue = normalizedData.reduce((acc, item) => acc + parseNumber(item.revenue), 0);
     return totalRevenue > 0
-      ? `📊 Total revenue is **$${formatNumber(totalRevenue)}**.`
-      : "⚠️ No revenue data found in dataset.";
+      ? ` Total revenue is **$${formatNumber(totalRevenue)}**.`
+      : " No revenue data found in dataset.";
   }
 
   // Average revenue
@@ -35,8 +35,8 @@ export const mockAIResponse = (query, data) => {
     const totalRevenue = normalizedData.reduce((acc, item) => acc + parseNumber(item.revenue), 0);
     const avgRevenue = totalRevenue / normalizedData.length;
     return totalRevenue > 0
-      ? `📈 The average revenue per entry is **$${formatNumber(avgRevenue)}**.`
-      : "⚠️ No revenue data found in dataset.";
+      ? ` The average revenue per entry is **$${formatNumber(avgRevenue)}**.`
+      : " No revenue data found in dataset.";
   }
 
   // Top product
@@ -45,8 +45,8 @@ export const mockAIResponse = (query, data) => {
       (prev, curr) => (parseNumber(curr.revenue) > parseNumber(prev.revenue) ? curr : prev)
     );
     return topProduct?.product
-      ? `🏆 Top-selling product is **${topProduct.product}** with **$${formatNumber(parseNumber(topProduct.revenue))}** in revenue.`
-      : "⚠️ No product data found.";
+      ? ` Top-selling product is **${topProduct.product}** with **$${formatNumber(parseNumber(topProduct.revenue))}** in revenue.`
+      : " No product data found.";
   }
 
   // Top N products
@@ -59,8 +59,8 @@ export const mockAIResponse = (query, data) => {
       .slice(0, n)
       .map(p => `${p.product} ($${formatNumber(parseNumber(p.revenue))})`);
     return topProducts.length
-      ? `🏆 Top ${n} products: ${topProducts.join(", ")}.`
-      : "⚠️ No product data found.";
+      ? ` Top ${n} products: ${topProducts.join(", ")}.`
+      : " No product data found.";
   }
 
   // Most profitable region
@@ -70,22 +70,22 @@ export const mockAIResponse = (query, data) => {
       const region = item.region || "Unknown";
       regionRevenue[region] = (regionRevenue[region] || 0) + parseNumber(item.revenue);
     });
-    if (Object.keys(regionRevenue).length === 0) return "🌍 No region data found.";
+    if (Object.keys(regionRevenue).length === 0) return " No region data found.";
     const [region, revenue] = Object.entries(regionRevenue).sort((a, b) => b[1] - a[1])[0];
-    return `🌍 The most profitable region is **${region}** with **$${formatNumber(revenue)}** in revenue.`;
+    return ` The most profitable region is **${region}** with **$${formatNumber(revenue)}** in revenue.`;
   }
 
   // Customer count
   if (lowerQuery.includes("customers") || lowerQuery.includes("users") || lowerQuery.includes("clients")) {
     const uniqueCustomers = new Set(normalizedData.map(d => d.customer || d.user)).size;
-    return `👥 There are **${uniqueCustomers}** unique customers in your dataset.`;
+    return ` There are **${uniqueCustomers}** unique customers in your dataset.`;
   }
 
   // Number of sales (row count)
   if (lowerQuery.includes("number of sales") || lowerQuery.includes("how many sales") || lowerQuery.includes("entries")) {
-    return `🗂️ Your dataset contains **${normalizedData.length}** sales records.`;
+    return ` Your dataset contains **${normalizedData.length}** sales records.`;
   }
 
   // Default fallback
-  return "🤔 I'm analyzing your data. Try asking: `Total sales`, `Top product`, `Average revenue`, or `Most profitable region`.";
+  return " I'm analyzing your data. Try asking: `Total sales`, `Top product`, `Average revenue`, or `Most profitable region`.";
 };
