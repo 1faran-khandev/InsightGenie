@@ -1,5 +1,5 @@
 import React from "react";
-import { Database, Table, AlertTriangle, Users } from "lucide-react"; // icons
+import { Database, Table, AlertTriangle, Users } from "lucide-react";
 
 const dummyStats = [
   { label: "Total Records", value: 1200, color: "bg-blue-600", icon: <Database size={28} /> },
