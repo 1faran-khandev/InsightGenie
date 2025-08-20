@@ -22,7 +22,7 @@ const Dashboard = () => {
           <FileUpload />
           <DataSummary data={data} />
           <InsightsCards data={data} />
-          <ChartsSection data={data} />   {/* ✅ Pass data here */}
+          <ChartsSection data={data} />  
         </div>
       </div>
 
