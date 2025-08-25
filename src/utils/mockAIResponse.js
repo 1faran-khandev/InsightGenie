@@ -5,7 +5,7 @@ export const mockAIResponse = (query, data) => {
 
   const lowerQuery = query.toLowerCase();
 
-  // ✅ Normalize dataset keys (case-insensitive access)
+  //  Normalize dataset keys (case-insensitive access)
   const normalizedData = data.map((item) => {
     const obj = {};
     Object.keys(item).forEach((k) => {
@@ -14,7 +14,7 @@ export const mockAIResponse = (query, data) => {
     return obj;
   });
 
-  // ---------- Helpers ----------
+
   const parseNumber = (val) => {
     if (val === null || val === undefined) return 0;
     const cleaned = val.toString().replace(/[^0-9.-]/g, ""); // remove $ , %
@@ -38,8 +38,8 @@ export const mockAIResponse = (query, data) => {
           0
         );
         return totalRevenue > 0
-          ? `📊 Total revenue is **$${formatNumber(totalRevenue)}**.`
-          : "⚠️ No revenue data found in dataset.";
+          ? ` Total revenue is **$${formatNumber(totalRevenue)}**.`
+          : "  No revenue data found in dataset.";
       },
     },
     {
@@ -51,10 +51,10 @@ export const mockAIResponse = (query, data) => {
         );
         const avgRevenue = totalRevenue / normalizedData.length;
         return totalRevenue > 0
-          ? `📈 The average revenue per entry is **$${formatNumber(
+          ? ` The average revenue per entry is **$${formatNumber(
               avgRevenue
             )}**.`
-          : "⚠️ No revenue data found in dataset.";
+          : " No revenue data found in dataset.";
       },
     },
     {
@@ -64,10 +64,10 @@ export const mockAIResponse = (query, data) => {
           parseNumber(curr.revenue) > parseNumber(prev.revenue) ? curr : prev
         );
         return topProduct?.product
-          ? `🏆 Top-selling product is **${topProduct.product}** with **$${formatNumber(
+          ? ` Top-selling product is **${topProduct.product}** with **$${formatNumber(
               parseNumber(topProduct.revenue)
             )}** in revenue.`
-          : "⚠️ No product data found.";
+          : " No product data found.";
       },
     },
     {
@@ -84,8 +84,8 @@ export const mockAIResponse = (query, data) => {
               `${i + 1}. ${p.product} ($${formatNumber(parseNumber(p.revenue))})`
           );
         return topN.length
-          ? `🏆 Top ${n} products:\n${topN.join("\n")}`
-          : "⚠️ No product data found.";
+          ? ` Top ${n} products:\n${topN.join("\n")}`
+          : " No product data found.";
       },
     },
     {
@@ -98,11 +98,11 @@ export const mockAIResponse = (query, data) => {
             (regionRevenue[region] || 0) + parseNumber(item.revenue);
         });
         if (Object.keys(regionRevenue).length === 0)
-          return "🌍 No region data found.";
+          return " No region data found.";
         const [region, revenue] = Object.entries(regionRevenue).sort(
           (a, b) => b[1] - a[1]
         )[0];
-        return `🌍 The most profitable region is **${region}** with **$${formatNumber(
+        return ` The most profitable region is **${region}** with **$${formatNumber(
           revenue
         )}** in revenue.`;
       },
@@ -119,7 +119,7 @@ export const mockAIResponse = (query, data) => {
     {
       keywords: ["number of sales", "how many sales", "entries", "records"],
       response: () =>
-        `🗂️ Your dataset contains **${normalizedData.length}** sales records.`,
+        ` Your dataset contains **${normalizedData.length}** sales records.`,
     },
   ];
 
@@ -131,9 +131,9 @@ export const mockAIResponse = (query, data) => {
   }
 
   // ---------- Default Fallback ----------
-  return `🤔 I'm analyzing your data but couldn't match that query.
+  return ` I'm analyzing your data but couldn't match that query.
 
-💡 Try asking:
+ Try asking:
 - "Total revenue"
 - "Average revenue"
 - "Top 3 products"
