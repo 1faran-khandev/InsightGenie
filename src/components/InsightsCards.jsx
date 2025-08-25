@@ -18,7 +18,7 @@ const cardVariants = {
   }),
 };
 
-// 🔹 Reusable Card
+// Reusable Card
 const InsightCard = ({ icon: Icon, label, value, color, index }) => (
   <motion.div custom={index} initial="hidden" animate="visible" variants={cardVariants}>
     <Card className="shadow-sm rounded-2xl border border-gray-200 dark:border-gray-800 hover:shadow-md transition duration-300">
@@ -40,7 +40,7 @@ const InsightCard = ({ icon: Icon, label, value, color, index }) => (
 );
 
 export default function InsightsCards({ data }) {
-  // Example insights (you can expand later with real AI-driven insights)
+  
   const insights = [
     {
       label: "Top-Selling Product",
