@@ -71,7 +71,7 @@ export default function ChartsSection({
         >
           <Card className="flex-1 shadow-md rounded-2xl border border-gray-200 dark:border-gray-800 flex flex-col">
             <CardHeader>
-              <CardTitle>📈 Monthly Trends</CardTitle>
+              <CardTitle> Monthly Trends</CardTitle>
               <CardDescription>
                 Performance over the past 6 months
               </CardDescription>
@@ -107,7 +107,7 @@ export default function ChartsSection({
         >
           <Card className="flex-1 shadow-md rounded-2xl border border-gray-200 dark:border-gray-800 flex flex-col">
             <CardHeader>
-              <CardTitle>📊 Category Distribution</CardTitle>
+              <CardTitle> Category Distribution</CardTitle>
               <CardDescription>
                 Comparison across categories
               </CardDescription>
@@ -136,7 +136,7 @@ export default function ChartsSection({
         >
           <Card className="flex-1 shadow-md rounded-2xl border border-gray-200 dark:border-gray-800 flex flex-col">
             <CardHeader>
-              <CardTitle>🥧 Segment Share</CardTitle>
+              <CardTitle> Segment Share</CardTitle>
               <CardDescription>
                 Relative contribution of groups
               </CardDescription>
