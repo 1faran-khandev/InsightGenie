@@ -41,12 +41,12 @@ const DataSummary = ({ data }) => {
   // --- Calculations ---
   const totalRecords = data.length;
 
-  // ✅ Unique Users (check for "user" or "UserID" field)
+  //  Unique Users (check for "user" or "UserID" field)
   const uniqueUsers = new Set(
     data.map((row) => row.user || row.UserID || row.id || "unknown")
   ).size;
 
-  // ✅ Collect all numeric values
+  //  Collect all numeric values
   const numericValues = [];
   data.forEach((row) => {
     Object.values(row).forEach((val) => {
@@ -54,12 +54,12 @@ const DataSummary = ({ data }) => {
     });
   });
 
-  // ✅ Average of numeric values
+  //  Average of numeric values
   const avgValue = numericValues.length
     ? Math.round(numericValues.reduce((a, b) => a + b, 0) / numericValues.length)
     : 0;
 
-  // ✅ Growth rate (if dataset has time progression → first vs last numeric value)
+  //  Growth rate (if dataset has time progression → first vs last numeric value)
   let growthRate = 0;
   if (numericValues.length >= 2) {
     const first = numericValues[0];
