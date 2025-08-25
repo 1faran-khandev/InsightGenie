@@ -1,53 +1,112 @@
+// src/components/HeroSection.jsx
 import React from "react";
+import { motion } from "framer-motion";
+import Button from "./ui/Button";
+import { BarChart3, Brain, MessageCircle } from "lucide-react";
 
-const HeroSection = () => {
+const HeroSection = ({ scrollToDashboard }) => {
+  const features = [
+    {
+      title: "AI Insights",
+      desc: "Automatically generate insights from your uploaded datasets.",
+      icon: Brain,
+    },
+    {
+      title: "Data Visualizations",
+      desc: "Charts and dashboards that help you understand trends quickly.",
+      icon: BarChart3,
+    },
+    {
+      title: "AI Chat",
+      desc: "Ask questions about your data and get immediate answers.",
+      icon: MessageCircle,
+    },
+  ];
+
   return (
-    <section className="relative bg-gradient-to-r from-blue-900 to-blue-800 text-white py-32 px-6">
+    <section
+      className="relative bg-gradient-to-r from-blue-900 to-blue-800 text-white py-32 px-6 overflow-hidden"
+      aria-labelledby="hero-heading"
+    >
       <div className="max-w-6xl mx-auto text-center">
         {/* Title */}
-        <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fadeInDown">
+        <motion.h1
+          id="hero-heading"
+          className="text-5xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
           InsightGenie
-        </h1>
+        </motion.h1>
 
         {/* Subtitle */}
-        <p className="text-xl md:text-2xl mb-8 animate-fadeInUp">
+        <motion.p
+          className="text-lg md:text-2xl mb-8 max-w-3xl mx-auto text-gray-200"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 1 }}
+        >
           Upload your datasets and get instant AI-powered insights & visualizations.
-        </p>
+        </motion.p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col md:flex-row justify-center gap-4 animate-fadeInUp delay-200">
-          <button className="bg-neonBlue hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition shadow-lg">
+        <motion.div
+          className="flex flex-col md:flex-row justify-center gap-4 mb-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+        >
+          <Button
+            onClick={scrollToDashboard}
+            className="bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/30"
+          >
             Upload Data
-          </button>
-          <button className="bg-transparent border border-white hover:bg-white hover:text-blue-900 font-semibold py-3 px-6 rounded-lg transition shadow-lg">
+          </Button>
+          <Button
+            onClick={scrollToDashboard}
+            className="bg-transparent border border-white hover:border-blue-400 hover:bg-white/10 transition"
+          >
             Try Demo
-          </button>
-        </div>
+          </Button>
+        </motion.div>
 
-        {/* Optional illustration / hero image */}
-        <div className="mt-12">
+        {/* Hero Illustration */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5, duration: 1 }}
+        >
           <img
-            src="/hero-illustration.svg" // Replace with your illustration
-            alt="AI Data Insights"
-            className="mx-auto w-full max-w-3xl animate-fadeInUp delay-400"
+            src="/hero-illustration.svg"
+            alt="AI-driven dashboard with insights and charts"
+            className="mx-auto w-full max-w-3xl"
+            loading="lazy"
           />
-        </div>
+        </motion.div>
 
-        {/* Feature highlights */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-200">
-          <div className="bg-white bg-opacity-10 p-6 rounded-lg shadow-lg hover:bg-opacity-20 transition">
-            <h3 className="text-xl font-semibold mb-2">AI Insights</h3>
-            <p>Automatically generate insights from your uploaded datasets.</p>
-          </div>
-          <div className="bg-white bg-opacity-10 p-6 rounded-lg shadow-lg hover:bg-opacity-20 transition">
-            <h3 className="text-xl font-semibold mb-2">Data Visualizations</h3>
-            <p>Charts and dashboards that help you understand trends quickly.</p>
-          </div>
-          <div className="bg-white bg-opacity-10 p-6 rounded-lg shadow-lg hover:bg-opacity-20 transition">
-            <h3 className="text-xl font-semibold mb-2">AI Chat</h3>
-            <p>Ask questions about your data and get immediate answers.</p>
-          </div>
-        </div>
+        {/* Feature Highlights */}
+        <motion.div
+          className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-200"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2, duration: 1 }}
+        >
+          {features.map((feature, i) => {
+            const Icon = feature.icon;
+            return (
+              <div
+                key={i}
+                className="bg-white/10 backdrop-blur-md p-6 rounded-xl shadow-lg hover:shadow-blue-500/30 
+                hover:scale-105 transition transform border border-white/20"
+              >
+                <Icon className="w-8 h-8 mb-3 text-blue-400" />
+                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-sm text-gray-300">{feature.desc}</p>
+              </div>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );

@@ -1,39 +1,84 @@
+// src/components/InsightsCards.jsx
 import React from "react";
-import { TrendingUp, TrendingDown, Globe, ShoppingCart } from "lucide-react";
+import { motion } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Star,
+  TrendingUp,
+  Globe,
+  ArrowDownCircle,
+} from "lucide-react";
 
-const dummyInsights = [
-  { title: "Top-Selling Product", value: "Smartphone X", icon: ShoppingCart, color: "text-blue-600" },
-  { title: "Revenue Growth", value: "12% ↑ last month", icon: TrendingUp, color: "text-green-600" },
-  { title: "Most Active Region", value: "North America", icon: Globe, color: "text-purple-600" },
-  { title: "Customer Churn", value: "5% ↓", icon: TrendingDown, color: "text-red-600" },
-];
-
-const InsightsCards = () => {
-  return (
-    <div className="mb-6">
-      <h3 className="text-2xl font-bold mb-4">AI Insights</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        {dummyInsights.map((insight, index) => {
-          const Icon = insight.icon;
-          return (
-            <div
-              key={index}
-              className="bg-white shadow-md rounded-xl p-5 hover:shadow-xl hover:scale-105 transition transform flex flex-col justify-center items-center text-center min-h-[140px]"
-            >
-              {/* Icon */}
-              <Icon className={`w-8 h-8 mb-3 ${insight.color}`} />
-
-              {/* Title */}
-              <p className="text-sm text-gray-500">{insight.title}</p>
-
-              {/* Value */}
-              <p className="text-lg font-bold mt-1">{insight.value}</p>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.08, duration: 0.4 },
+  }),
 };
 
-export default InsightsCards;
+// 🔹 Reusable Card
+const InsightCard = ({ icon: Icon, label, value, color, index }) => (
+  <motion.div custom={index} initial="hidden" animate="visible" variants={cardVariants}>
+    <Card className="shadow-sm rounded-2xl border border-gray-200 dark:border-gray-800 hover:shadow-md transition duration-300">
+      <CardContent className="flex items-center space-x-4 p-6 min-h-[110px]">
+        <div className="flex-shrink-0">
+          <Icon className={`w-10 h-10 ${color}`} />
+        </div>
+        <div>
+          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+            {label}
+          </p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            {value}
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  </motion.div>
+);
+
+export default function InsightsCards({ data }) {
+  // Example insights (you can expand later with real AI-driven insights)
+  const insights = [
+    {
+      label: "Top-Selling Product",
+      value: "Smartphone X",
+      icon: Star,
+      color: "text-yellow-500",
+    },
+    {
+      label: "Revenue Growth",
+      value: "12% ↑",
+      icon: TrendingUp,
+      color: "text-green-600",
+    },
+    {
+      label: "Most Active Region",
+      value: "North America",
+      icon: Globe,
+      color: "text-blue-600",
+    },
+    {
+      label: "Customer Churn",
+      value: "5% ↓",
+      icon: ArrowDownCircle,
+      color: "text-red-600",
+    },
+  ];
+
+  return (
+    <section>
+      <h2 className="text-2xl font-bold mb-6 tracking-tight text-gray-900 dark:text-gray-100">
+        Key Insights
+      </h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {insights.map((insight, index) => (
+          <InsightCard key={index} {...insight} index={index} />
+        ))}
+      </div>
+    </section>
+  );
+}

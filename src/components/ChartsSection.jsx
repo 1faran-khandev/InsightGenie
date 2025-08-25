@@ -1,129 +1,172 @@
-import React, { useRef, useEffect, useState } from "react";
-import { Bar, Line, Pie } from "react-chartjs-2";
+// src/components/ChartsSection.jsx
+import React from "react";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  ArcElement,
-  Title,
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
   Tooltip,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Legend,
-  Filler,
-} from "chart.js";
+  ResponsiveContainer,
+} from "recharts";
+import { motion } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
-
-const ChartCard = ({ title, children }) => (
-  <div className="bg-white p-4 rounded-lg shadow-md h-[350px] flex flex-col">
-    <h4 className="text-lg font-semibold mb-2">{title}</h4>
-    <div className="flex-1">{children}</div>
-  </div>
-);
-
-const ChartsSection = ({ data }) => {
-  const labels = data.map((item) => item.month);
-  const sales = data.map((item) => item.sales);
-
-  // Refs for canvas elements
-  const barRef = useRef(null);
-  const lineRef = useRef(null);
-
-  // Gradient states
-  const [barGradient, setBarGradient] = useState("rgba(59, 130, 246, 0.7)");
-  const [lineGradient, setLineGradient] = useState("rgba(34, 197, 94, 0.3)");
-
-  // Create gradients on mount
-  useEffect(() => {
-    if (barRef.current) {
-      const ctx = barRef.current.ctx;
-      const grad = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
-      grad.addColorStop(0, "rgba(59, 130, 246, 0.9)");
-      grad.addColorStop(1, "rgba(59, 130, 246, 0.3)");
-      setBarGradient(grad);
-    }
-
-    if (lineRef.current) {
-      const ctx = lineRef.current.ctx;
-      const grad = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
-      grad.addColorStop(0, "rgba(34, 197, 94, 0.7)");
-      grad.addColorStop(1, "rgba(34, 197, 94, 0.2)");
-      setLineGradient(grad);
-    }
-  }, []);
-
-  const barData = {
-    labels,
-    datasets: [
-      {
-        label: "Sales",
-        data: sales,
-        backgroundColor: barGradient,
-      },
-    ],
-  };
-
-  const lineData = {
-    labels,
-    datasets: [
-      {
-        label: "Sales Trend",
-        data: sales,
-        borderColor: "rgba(34, 197, 94, 0.9)",
-        backgroundColor: lineGradient,
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  };
-
-  const pieData = {
-    labels,
-    datasets: [
-      {
-        label: "Sales Share",
-        data: sales,
-        backgroundColor: [
-          "rgba(59, 130, 246, 0.7)",
-          "rgba(234, 179, 8, 0.7)",
-          "rgba(239, 68, 68, 0.7)",
-          "rgba(16, 185, 129, 0.7)",
-        ],
-      },
-    ],
-  };
-
-  const options = { responsive: true, maintainAspectRatio: false };
-
-  return (
-    <div className="mb-6">
-      <h3 className="text-2xl font-bold mb-4">Data Visualizations</h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <ChartCard title="Revenue Growth">
-          <Bar ref={barRef} data={barData} options={options} />
-        </ChartCard>
-        <ChartCard title="Sales Trend">
-          <Line ref={lineRef} data={lineData} options={options} />
-        </ChartCard>
-        <ChartCard title="Sales Distribution">
-          <Pie data={pieData} options={options} />
-        </ChartCard>
-      </div>
-    </div>
-  );
+const CHART_COLORS = {
+  line: "#6366F1",
+  bar: "#10B981",
+  pie: ["#6366F1", "#10B981", "#F59E0B", "#EF4444"],
 };
 
-export default ChartsSection;
+export default function ChartsSection({
+  lineData = [
+    { month: "Jan", value: 30 },
+    { month: "Feb", value: 50 },
+    { month: "Mar", value: 40 },
+    { month: "Apr", value: 70 },
+    { month: "May", value: 60 },
+    { month: "Jun", value: 90 },
+  ],
+  barData = [
+    { category: "A", count: 40 },
+    { category: "B", count: 55 },
+    { category: "C", count: 30 },
+    { category: "D", count: 70 },
+  ],
+  pieData = [
+    { name: "Group A", value: 400 },
+    { name: "Group B", value: 300 },
+    { name: "Group C", value: 300 },
+    { name: "Group D", value: 200 },
+  ],
+}) {
+  return (
+    <section className="mt-12">
+      {/* Section Header */}
+      <h2 className="text-2xl font-bold mb-6 tracking-tight text-gray-900 dark:text-gray-100">
+        Data Visualizations
+      </h2>
+
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        {/* Line Chart */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex"
+        >
+          <Card className="flex-1 shadow-md rounded-2xl border border-gray-200 dark:border-gray-800 flex flex-col">
+            <CardHeader>
+              <CardTitle>📈 Monthly Trends</CardTitle>
+              <CardDescription>
+                Performance over the past 6 months
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-4 flex-1">
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={lineData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="value"
+                    stroke={CHART_COLORS.line}
+                    strokeWidth={3}
+                    dot={{ r: 5 }}
+                    activeDot={{ r: 8 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Bar Chart */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="flex"
+        >
+          <Card className="flex-1 shadow-md rounded-2xl border border-gray-200 dark:border-gray-800 flex flex-col">
+            <CardHeader>
+              <CardTitle>📊 Category Distribution</CardTitle>
+              <CardDescription>
+                Comparison across categories
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-4 flex-1">
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={barData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                  <XAxis dataKey="category" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="count" fill={CHART_COLORS.bar} radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Pie Chart */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9 }}
+          className="flex"
+        >
+          <Card className="flex-1 shadow-md rounded-2xl border border-gray-200 dark:border-gray-800 flex flex-col">
+            <CardHeader>
+              <CardTitle>🥧 Segment Share</CardTitle>
+              <CardDescription>
+                Relative contribution of groups
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-4 flex-1">
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    dataKey="value"
+                    label
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={CHART_COLORS.pie[index % CHART_COLORS.pie.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
